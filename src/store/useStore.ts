@@ -26,6 +26,7 @@ interface AppState {
   currentWorkflowId: string;
   setCurrentWorkflowId: (id: string) => void;
   addWorkflow: (name: string) => void;
+  removeWorkflow: (id: string) => void;
   addDevice: (device: Omit<Device, 'id'>) => void;
   removeDevice: (id: string) => void;
   updateDevice: (id: string, updates: Partial<Device>) => void;
@@ -84,6 +85,16 @@ export const useStore = create<AppState>((set) => ({
   addWorkflow: (name) => set((state) => ({
     workflows: [...state.workflows, { id: Math.random().toString(36).substring(7), name, devices: [] }]
   })),
+  removeWorkflow: (id) => set((state) => {
+    const newWorkflows = state.workflows.filter((w) => w.id !== id);
+    const newCurrentId = state.currentWorkflowId === id 
+      ? (newWorkflows[0]?.id || '') 
+      : state.currentWorkflowId;
+    return {
+      workflows: newWorkflows,
+      currentWorkflowId: newCurrentId
+    };
+  }),
   addDevice: (device) => set((state) => ({
     workflows: state.workflows.map((w) => 
       w.id === state.currentWorkflowId 

@@ -1,13 +1,27 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import DeviceFrame from './DeviceFrame';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, isGrid, globalZoom } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom } = useStore();
+  
+  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
+
+  useEffect(() => {
+    const closeMenu = () => setContextMenu(null);
+    window.addEventListener('click', closeMenu);
+    return () => window.removeEventListener('click', closeMenu);
+  }, []);
+
+  const handleContextMenu = (e: React.MouseEvent, workflowId: string) => {
+    e.preventDefault();
+    if (['mobile', 'tablet', 'desktop'].includes(workflowId)) return;
+    setContextMenu({ x: e.clientX, y: e.clientY, workflowId });
+  };
   
   const currentWorkflow = workflows.find(w => w.id === currentWorkflowId);
   const devices = currentWorkflow ? currentWorkflow.devices : [];
@@ -30,6 +44,7 @@ export default function Workspace() {
           <button
             key={wf.id}
             onClick={() => setCurrentWorkflowId(wf.id)}
+            onContextMenu={(e) => handleContextMenu(e, wf.id)}
             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
               currentWorkflowId === wf.id
                 ? 'bg-accent text-background'
@@ -77,6 +92,25 @@ export default function Workspace() {
           ))
         )}
       </motion.div>
+
+      {contextMenu && (
+        <div 
+          className="fixed bg-[#141417] border border-[#1f1f23] rounded-lg shadow-xl z-50 py-1 min-w-[100px]"
+          style={{ top: contextMenu.y, left: contextMenu.x }}
+        >
+          <button
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to delete workflow "${workflows.find(w => w.id === contextMenu.workflowId)?.name}"?`)) {
+                removeWorkflow(contextMenu.workflowId);
+              }
+              setContextMenu(null);
+            }}
+            className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-[#1a1a1e] transition-colors"
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   );
 }
