@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Device, useStore } from '@/store/useStore';
 import { 
   RotateCw, 
@@ -17,9 +17,26 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, removeDevice, updateDevice } = useStore();
+  const { url, removeDevice, updateDevice, isExtendedMode } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [iframeHeight, setIframeHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isExtendedMode && !isLoading) {
+      setTimeout(() => {
+        const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
+        if (iframe && iframe.contentWindow) {
+          try {
+            const h = iframe.contentWindow.document.body.scrollHeight;
+            setIframeHeight(h);
+          } catch (e) {
+            console.log("Failed to read height", e);
+          }
+        }
+      }, 500);
+    }
+  }, [isExtendedMode, isLoading, device.id]);
 
   const toggleRotate = () => {
     updateDevice(device.id, { isRotated: !device.isRotated });
@@ -34,7 +51,8 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
   };
 
   const width = device.isRotated ? device.height : device.width;
-  const height = device.isRotated ? device.width : device.height;
+  const baseHeight = device.isRotated ? device.width : device.height;
+  const height = isExtendedMode ? (iframeHeight || 3000) : baseHeight;
 
   return (
     <div className="flex-shrink-0 flex flex-col gap-3">
@@ -120,14 +138,30 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         {/* Iframe */}
         <iframe
           id={`iframe-${device.id}`}
-          src={url}
+          src={`/api/proxy?url=${encodeURIComponent(url)}`}
           className={`w-full h-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            setIsLoading(false);
+            if (isExtendedMode) {
+              setTimeout(() => {
+                const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
+                if (iframe && iframe.contentWindow) {
+                  try {
+                    const h = iframe.contentWindow.document.body.scrollHeight;
+                    setIframeHeight(h);
+                  } catch (e) {
+                    console.log("Failed to read height", e);
+                  }
+                }
+              }, 500); // Give it a bit of time to render
+            }
+          }}
           onError={() => {
             setIsLoading(false);
             setHasError(true);
           }}
           sandbox="allow-scripts allow-same-origin"
+          scrolling={isExtendedMode ? 'no' : 'auto'}
         />
       </div>
     </div>

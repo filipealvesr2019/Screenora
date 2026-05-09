@@ -8,11 +8,12 @@ import {
   LayoutGrid, 
   Maximize2, 
   Moon,
-  Zap
+  Zap,
+  ChevronsDown
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen } = useStore();
+  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,6 +71,19 @@ export default function Topbar() {
           title="Toggle Grid"
         >
           <LayoutGrid className="w-5 h-5" />
+        </button>
+
+        {/* Extended Mode Toggle */}
+        <button 
+          onClick={toggleExtendedMode}
+          className={`p-2 rounded-lg border transition-colors ${
+            isExtendedMode 
+              ? 'bg-accent/10 border-accent text-accent' 
+              : 'bg-[#141417] border-[#1f1f23] text-muted-foreground hover:text-foreground'
+          }`}
+          title="Toggle Extended Mode"
+        >
+          <ChevronsDown className="w-5 h-5" />
         </button>
 
         {/* Fullscreen */}

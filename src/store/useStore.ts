@@ -27,6 +27,8 @@ interface AppState {
   setFullscreen: (isFullscreen: boolean) => void;
   isAddDeviceModalOpen: boolean;
   setAddDeviceModalOpen: (isOpen: boolean) => void;
+  isExtendedMode: boolean;
+  toggleExtendedMode: () => void;
 }
 
 export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
@@ -64,4 +66,6 @@ export const useStore = create<AppState>((set) => ({
   setFullscreen: (isFullscreen) => set({ isFullscreen }),
   isAddDeviceModalOpen: false,
   setAddDeviceModalOpen: (isOpen) => set({ isAddDeviceModalOpen: isOpen }),
+  isExtendedMode: false,
+  toggleExtendedMode: () => set((state) => ({ isExtendedMode: !state.isExtendedMode })),
 }));
