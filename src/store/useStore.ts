@@ -27,7 +27,7 @@ interface AppState {
   setCurrentWorkflowId: (id: string) => void;
   addWorkflow: (name: string) => void;
   removeWorkflow: (id: string) => void;
-  addDevice: (device: Omit<Device, 'id'>) => void;
+  addDevice: (device: Omit<Device, 'id' | 'isRotated' | 'zoom'>) => void;
   removeDevice: (id: string) => void;
   updateDevice: (id: string, updates: Partial<Device>) => void;
   globalZoom: number;
