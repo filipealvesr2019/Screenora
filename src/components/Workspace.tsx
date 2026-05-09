@@ -4,13 +4,17 @@ import React from 'react';
 import { useStore } from '@/store/useStore';
 import DeviceFrame from './DeviceFrame';
 import { motion } from 'framer-motion';
+import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { devices, isGrid, globalZoom } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, isGrid, globalZoom } = useStore();
+  
+  const currentWorkflow = workflows.find(w => w.id === currentWorkflowId);
+  const devices = currentWorkflow ? currentWorkflow.devices : [];
 
   return (
     <div 
-      className={`flex-1 overflow-auto custom-scrollbar p-10 relative ${
+      className={`flex-1 overflow-auto custom-scrollbar p-10 relative flex flex-col ${
         isGrid ? 'bg-grid' : 'bg-[#050505]'
       }`}
       style={{
@@ -20,6 +24,33 @@ export default function Workspace() {
         backgroundSize: '32px 32px',
       }}
     >
+      {/* Workflow Tabs */}
+      <div className="flex items-center gap-2 mb-6 bg-[#0c0c0e]/80 backdrop-blur-sm p-1.5 rounded-lg border border-[#1f1f23] w-max z-10">
+        {workflows.map((wf) => (
+          <button
+            key={wf.id}
+            onClick={() => setCurrentWorkflowId(wf.id)}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              currentWorkflowId === wf.id
+                ? 'bg-accent text-background'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {wf.name}
+          </button>
+        ))}
+        <button 
+          onClick={() => {
+            const name = prompt('Enter workflow name:');
+            if (name) addWorkflow(name);
+          }}
+          className="p-1.5 hover:bg-[#141417] rounded-md text-muted-foreground hover:text-foreground transition-colors"
+          title="Add Workflow"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+      </div>
+
       <motion.div 
         className="flex gap-10 items-start"
         style={{ 

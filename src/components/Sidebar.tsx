@@ -13,13 +13,16 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
-  const { devices, setAddDeviceModalOpen, setSelectedCategory } = useStore();
+  const { workflows, currentWorkflowId, setAddDeviceModalOpen, setSelectedCategory } = useStore();
+  
+  const currentWorkflow = workflows.find(w => w.id === currentWorkflowId);
+  const devices = currentWorkflow ? currentWorkflow.devices : [];
 
   const counts = {
-    mobile: devices.filter(d => d.type === 'mobile').length,
-    tablet: devices.filter(d => d.type === 'tablet').length,
-    desktop: devices.filter(d => d.type === 'desktop').length,
-    custom: devices.filter(d => d.type === 'custom').length
+    mobile: workflows.find(w => w.id === 'mobile')?.devices.length || 0,
+    tablet: workflows.find(w => w.id === 'tablet')?.devices.length || 0,
+    desktop: workflows.find(w => w.id === 'desktop')?.devices.length || 0,
+    custom: workflows.filter(w => !['mobile', 'tablet', 'desktop'].includes(w.id)).reduce((acc, w) => acc + w.devices.length, 0)
   };
 
   return (

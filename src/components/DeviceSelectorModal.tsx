@@ -7,7 +7,10 @@ import { X, Smartphone, Tablet, Monitor } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DeviceSelectorModal() {
-  const { selectedCategory, setSelectedCategory, addDevice, devices } = useStore();
+  const { selectedCategory, setSelectedCategory, addDevice, workflows, currentWorkflowId } = useStore();
+  
+  const currentWorkflow = workflows.find(w => w.id === currentWorkflowId);
+  const devices = currentWorkflow ? currentWorkflow.devices : [];
 
   const filteredPresets = allPresets.filter(
     (preset) => preset.type === selectedCategory

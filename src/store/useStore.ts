@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { allPresets } from '@/data/presets';
 
 export type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'custom';
 
@@ -12,10 +13,19 @@ export interface Device {
   zoom: number;
 }
 
+export interface Workflow {
+  id: string;
+  name: string;
+  devices: Device[];
+}
+
 interface AppState {
   url: string;
   setUrl: (url: string) => void;
-  devices: Device[];
+  workflows: Workflow[];
+  currentWorkflowId: string;
+  setCurrentWorkflowId: (id: string) => void;
+  addWorkflow: (name: string) => void;
   addDevice: (device: Omit<Device, 'id'>) => void;
   removeDevice: (id: string) => void;
   updateDevice: (id: string, updates: Partial<Device>) => void;
@@ -46,19 +56,54 @@ export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
 export const useStore = create<AppState>((set) => ({
   url: 'https://vercel.com',
   setUrl: (url) => set({ url }),
-  devices: [
-    { id: '1', name: 'iPhone 15', width: 393, height: 852, type: 'mobile', isRotated: false, zoom: 1 },
-    { id: '2', name: 'iPad Air', width: 820, height: 1180, type: 'tablet', isRotated: false, zoom: 1 },
-    { id: '3', name: 'Desktop Full HD', width: 1920, height: 1080, type: 'desktop', isRotated: false, zoom: 1 },
+  workflows: [
+    { 
+      id: 'mobile', 
+      name: 'mobile', 
+      devices: allPresets
+        .filter(p => p.type === 'mobile')
+        .map((p, index) => ({ id: `mobile-${index}`, name: p.name, width: p.width, height: p.height, type: p.type, isRotated: false, zoom: 1 }))
+    },
+    { 
+      id: 'tablet', 
+      name: 'tablet', 
+      devices: allPresets
+        .filter(p => p.type === 'tablet')
+        .map((p, index) => ({ id: `tablet-${index}`, name: p.name, width: p.width, height: p.height, type: p.type, isRotated: false, zoom: 1 }))
+    },
+    { 
+      id: 'desktop', 
+      name: 'desktop', 
+      devices: allPresets
+        .filter(p => p.type === 'desktop')
+        .map((p, index) => ({ id: `desktop-${index}`, name: p.name, width: p.width, height: p.height, type: p.type, isRotated: false, zoom: 1 }))
+    },
   ],
+  currentWorkflowId: 'mobile',
+  setCurrentWorkflowId: (id) => set({ currentWorkflowId: id }),
+  addWorkflow: (name) => set((state) => ({
+    workflows: [...state.workflows, { id: Math.random().toString(36).substring(7), name, devices: [] }]
+  })),
   addDevice: (device) => set((state) => ({
-    devices: [...state.devices, { ...device, id: Math.random().toString(36).substring(7), isRotated: false, zoom: 1 }]
+    workflows: state.workflows.map((w) => 
+      w.id === state.currentWorkflowId 
+        ? { ...w, devices: [...w.devices, { ...device, id: Math.random().toString(36).substring(7), isRotated: false, zoom: 1 }] }
+        : w
+    )
   })),
   removeDevice: (id) => set((state) => ({
-    devices: state.devices.filter((d) => d.id !== id)
+    workflows: state.workflows.map((w) => 
+      w.id === state.currentWorkflowId 
+        ? { ...w, devices: w.devices.filter((d) => d.id !== id) }
+        : w
+    )
   })),
   updateDevice: (id, updates) => set((state) => ({
-    devices: state.devices.map((d) => d.id === id ? { ...d, ...updates } : d)
+    workflows: state.workflows.map((w) => 
+      w.id === state.currentWorkflowId 
+        ? { ...w, devices: w.devices.map((d) => d.id === id ? { ...d, ...updates } : d) }
+        : w
+    )
   })),
   globalZoom: 1,
   setGlobalZoom: (globalZoom) => set({ globalZoom }),
