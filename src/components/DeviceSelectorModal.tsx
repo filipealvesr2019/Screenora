@@ -7,7 +7,7 @@ import { X, Smartphone, Tablet, Monitor } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DeviceSelectorModal() {
-  const { selectedCategory, setSelectedCategory, addDevice } = useStore();
+  const { selectedCategory, setSelectedCategory, addDevice, devices } = useStore();
 
   const filteredPresets = allPresets.filter(
     (preset) => preset.type === selectedCategory
@@ -90,20 +90,32 @@ export default function DeviceSelectorModal() {
                   <div key={brand} className="mb-6 last:mb-0">
                     <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{brand}</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {brandPresets.map((preset) => (
-                        <button
-                          key={preset.name}
-                          onClick={() => handleAddDevice(preset)}
-                          className="bg-[#141417] border border-[#1f1f23] hover:border-accent/50 rounded-xl p-4 flex flex-col gap-1 text-left transition-colors group"
-                        >
-                          <span className="font-semibold text-foreground group-hover:text-accent transition-colors">
-                            {preset.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {preset.width} × {preset.height}
-                          </span>
-                        </button>
-                      ))}
+                      {brandPresets.map((preset) => {
+                        const isActive = devices.some(d => d.name === preset.name);
+                        return (
+                          <button
+                            key={preset.name}
+                            onClick={() => handleAddDevice(preset)}
+                            className={`bg-[#141417] border rounded-xl p-4 flex flex-col gap-1 text-left transition-colors group relative ${
+                              isActive ? 'border-accent' : 'border-[#1f1f23] hover:border-accent/50'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="font-semibold text-foreground group-hover:text-accent transition-colors">
+                                {preset.name}
+                              </span>
+                              {isActive && (
+                                <span className="text-[10px] bg-accent/20 text-accent px-1.5 py-0.5 rounded font-bold">
+                                  ACTIVE
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                              {preset.width} × {preset.height}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 );
