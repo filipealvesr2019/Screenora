@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
-  const { devices, setAddDeviceModalOpen } = useStore();
+  const { devices, setAddDeviceModalOpen, setSelectedCategory } = useStore();
 
   const counts = {
     mobile: presets.filter(p => p.type === 'mobile').length,
@@ -76,21 +76,30 @@ export default function Sidebar() {
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Presets</span>
           </div>
           <div className="flex flex-col gap-1">
-            <button className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left">
+            <button 
+              onClick={() => setSelectedCategory('mobile')}
+              className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left w-full"
+            >
               <div className="flex items-center gap-2">
                 <Smartphone className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <span className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">Mobile</span>
               </div>
               <span className="text-xs bg-[#1a1a1e] text-muted-foreground px-1.5 py-0.5 rounded-md">{counts.mobile}</span>
             </button>
-            <button className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left">
+            <button 
+              onClick={() => setSelectedCategory('tablet')}
+              className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left w-full"
+            >
               <div className="flex items-center gap-2">
                 <Tablet className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <span className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">Tablet</span>
               </div>
               <span className="text-xs bg-[#1a1a1e] text-muted-foreground px-1.5 py-0.5 rounded-md">{counts.tablet}</span>
             </button>
-            <button className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left">
+            <button 
+              onClick={() => setSelectedCategory('desktop')}
+              className="flex items-center justify-between px-2 py-2 hover:bg-[#141417] rounded-md group text-left w-full"
+            >
               <div className="flex items-center gap-2">
                 <Monitor className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <span className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">Desktop</span>

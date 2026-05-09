@@ -29,6 +29,8 @@ interface AppState {
   setAddDeviceModalOpen: (isOpen: boolean) => void;
   isExtendedMode: boolean;
   toggleExtendedMode: () => void;
+  selectedCategory: DeviceType | null;
+  setSelectedCategory: (category: DeviceType | null) => void;
 }
 
 export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
@@ -68,4 +70,6 @@ export const useStore = create<AppState>((set) => ({
   setAddDeviceModalOpen: (isOpen) => set({ isAddDeviceModalOpen: isOpen }),
   isExtendedMode: false,
   toggleExtendedMode: () => set((state) => ({ isExtendedMode: !state.isExtendedMode })),
+  selectedCategory: null,
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
 }));

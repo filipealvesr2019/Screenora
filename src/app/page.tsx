@@ -2,6 +2,7 @@ import Sidebar from '@/components/Sidebar';
 import Topbar from '@/components/Topbar';
 import Workspace from '@/components/Workspace';
 import AddDeviceModal from '@/components/AddDeviceModal';
+import DeviceSelectorModal from '@/components/DeviceSelectorModal';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <Workspace />
       </div>
       <AddDeviceModal />
+      <DeviceSelectorModal />
     </div>
   );
 }
