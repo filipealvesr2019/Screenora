@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useStore, presets } from '@/store/useStore';
+import { useStore } from '@/store/useStore';
 import { 
   Plus, 
   Smartphone, 
@@ -16,10 +16,10 @@ export default function Sidebar() {
   const { devices, setAddDeviceModalOpen, setSelectedCategory } = useStore();
 
   const counts = {
-    mobile: presets.filter(p => p.type === 'mobile').length,
-    tablet: presets.filter(p => p.type === 'tablet').length,
-    desktop: presets.filter(p => p.type === 'desktop').length,
-    custom: 0
+    mobile: devices.filter(d => d.type === 'mobile').length,
+    tablet: devices.filter(d => d.type === 'tablet').length,
+    desktop: devices.filter(d => d.type === 'desktop').length,
+    custom: devices.filter(d => d.type === 'custom').length
   };
 
   return (
