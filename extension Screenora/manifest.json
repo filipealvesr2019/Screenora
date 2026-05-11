@@ -13,9 +13,9 @@
     }]
   },
   "icons": {
-    "16": "logo.svg",
-    "48": "logo.svg",
-    "128": "logo.svg"
+    "16": "logo.ico",
+    "48": "logo.ico",
+    "128": "logo.ico"
   },
   "action": {
     "default_title": "Abrir Screenora"
