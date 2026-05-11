@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Screenora Iframe Unlocker",
+  "name": "Screenora responsive viewer",
   "version": "1.0",
   "description": "Remove X-Frame-Options e CSP de qualquer domínio para permitir visualização no Screenora.",
   "permissions": ["declarativeNetRequest", "contextMenus", "activeTab"],
