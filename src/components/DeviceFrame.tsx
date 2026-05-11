@@ -135,10 +135,9 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
           </div>
         )}
 
-        {/* Iframe */}
         <iframe
           id={`iframe-${device.id}`}
-          src={`/api/proxy?url=${encodeURIComponent(url)}`}
+          src={url}
           className={`w-full h-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           onLoad={() => {
             setIsLoading(false);

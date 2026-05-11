@@ -11,7 +11,22 @@
       ]
     },
     "condition": {
-      "regexFilter": ".*"
+      "urlFilter": "http://*/*"
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        { "header": "X-Frame-Options", "operation": "remove" },
+        { "header": "Content-Security-Policy", "operation": "remove" },
+        { "header": "Access-Control-Allow-Origin", "operation": "set", "value": "*" }
+      ]
+    },
+    "condition": {
+      "urlFilter": "https://*/*"
     }
   }
 ]
