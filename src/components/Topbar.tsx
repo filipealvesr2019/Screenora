@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import { 
   Globe, 
@@ -15,6 +15,15 @@ import {
 export default function Topbar() {
   const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const urlParam = searchParams.get('url');
+    if (urlParam) {
+      setUrl(urlParam);
+      setInputUrl(urlParam);
+    }
+  }, [setUrl]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
