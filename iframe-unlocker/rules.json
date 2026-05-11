@@ -6,27 +6,12 @@
       "type": "modifyHeaders",
       "responseHeaders": [
         { "header": "X-Frame-Options", "operation": "remove" },
-        { "header": "Content-Security-Policy", "operation": "remove" }
+        { "header": "Content-Security-Policy", "operation": "remove" },
+        { "header": "Access-Control-Allow-Origin", "operation": "set", "value": "*" }
       ]
     },
     "condition": {
-      "urlFilter": "localhost:3000",
-      "resourceTypes": ["sub_frame"]
-    }
-  },
-  {
-    "id": 2,
-    "priority": 1,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        { "header": "X-Frame-Options", "operation": "remove" },
-        { "header": "Content-Security-Policy", "operation": "remove" }
-      ]
-    },
-    "condition": {
-      "urlFilter": "127.0.0.1:3000",
-      "resourceTypes": ["sub_frame"]
+      "regexFilter": ".*"
     }
   }
 ]

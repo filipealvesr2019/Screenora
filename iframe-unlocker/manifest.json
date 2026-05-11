@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "Screenora Iframe Unlocker",
   "version": "1.0",
-  "description": "Remove X-Frame-Options e CSP de domínios localhost para permitir visualização no Screenora.",
-  "permissions": ["declarativeNetRequest", "contextMenus"],
-  "host_permissions": ["http://localhost:3000/*", "http://127.0.0.1:3000/*"],
+  "description": "Remove X-Frame-Options e CSP de qualquer domínio para permitir visualização no Screenora.",
+  "permissions": ["declarativeNetRequest", "contextMenus", "activeTab"],
+  "host_permissions": ["<all_urls>"],
   "declarative_net_request": {
     "rule_resources": [{
       "id": "ruleset_1",
