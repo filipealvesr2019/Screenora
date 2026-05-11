@@ -11,8 +11,7 @@
       ]
     },
     "condition": {
-      "urlFilter": "http://*/*",
-      "excludedRequestDomains": ["localhost:3001", "127.0.0.1:3001", "page-viewer-sepia.vercel.app"]
+      "urlFilter": "http://*/*"
     }
   },
   {
@@ -27,8 +26,17 @@
       ]
     },
     "condition": {
-      "urlFilter": "https://*/*",
-      "excludedRequestDomains": ["localhost:3001", "127.0.0.1:3001", "page-viewer-sepia.vercel.app"]
+      "urlFilter": "https://*/*"
+    }
+  },
+  {
+    "id": 4,
+    "priority": 2,
+    "action": {
+      "type": "allow"
+    },
+    "condition": {
+      "urlFilter": "page-viewer-sepia.vercel.app"
     }
   }
 ]
