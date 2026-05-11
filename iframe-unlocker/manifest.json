@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Desbloqueador de Iframe Local",
+  "name": "Screenora Iframe Unlocker",
   "version": "1.0",
-  "description": "Remove X-Frame-Options e CSP de domínios localhost para permitir visualização em iframes.",
+  "description": "Remove X-Frame-Options e CSP de domínios localhost para permitir visualização no Screenora.",
   "permissions": ["declarativeNetRequest"],
   "host_permissions": ["http://localhost:3000/*", "http://127.0.0.1:3000/*"],
   "declarative_net_request": {
@@ -11,5 +11,10 @@
       "enabled": true,
       "path": "rules.json"
     }]
+  },
+  "icons": {
+    "16": "icon128.png",
+    "48": "icon128.png",
+    "128": "icon128.png"
   }
 }
