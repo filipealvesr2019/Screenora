@@ -11,7 +11,8 @@
       ]
     },
     "condition": {
-      "urlFilter": "http://*/*"
+      "urlFilter": "http://*/*",
+      "excludedRequestDomains": ["page-viewer-sepia.vercel.app"]
     }
   },
   {
@@ -26,7 +27,8 @@
       ]
     },
     "condition": {
-      "urlFilter": "https://*/*"
+      "urlFilter": "https://*/*",
+      "excludedRequestDomains": ["page-viewer-sepia.vercel.app"]
     }
   }
 ]
