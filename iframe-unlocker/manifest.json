@@ -13,8 +13,8 @@
     }]
   },
   "icons": {
-    "16": "icon128.png",
-    "48": "icon128.png",
-    "128": "icon128.png"
+    "16": "logo.svg",
+    "48": "logo.svg",
+    "128": "logo.svg"
   }
 }
