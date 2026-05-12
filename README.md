@@ -4,52 +4,56 @@
   <img src="screenora-capa.png" alt="Screenora Cover" width="100%">
 </p>
 
-O **Screenora** é uma ferramenta avançada de visualização responsiva que permite testar seus sites e aplicações em múltiplos dispositivos simulados simultaneamente. Ideal para desenvolvedores e designers que precisam garantir a qualidade visual em qualquer tela.
+<p align="center">
+  <a href="README.pt.md">Leia em Português</a>
+</p>
+
+**Screenora** is an advanced responsive viewing tool that allows you to test your websites and applications on multiple simulated devices simultaneously. Ideal for developers and designers who need to ensure visual quality on any screen.
 
 ---
 
-## ✨ Funcionalidades Principais
+## ✨ Key Features
 
-- 🔄 Visualização Simultânea: Teste layouts em resoluções de Mobile, Tablet e Desktop lado a lado.
-- 📜 Universal Scroll: Role a página em um dispositivo e todos os outros rolarão sincronizados.
-- 🧩 Extensão Dedicada: Remove cabeçalhos de bloqueio de iframe para carregar qualquer URL.
-- 🎨 Interface Premium: Design escuro, moderno e focado na experiência do usuário.
+- 🔄 Simultaneous Viewing: Test layouts in Mobile, Tablet, and Desktop resolutions side-by-side.
+- 📜 Universal Scroll: Scroll on one device and all others will scroll in sync.
+- 🧩 Dedicated Extension: Removes iframe blocking headers to load any URL.
+- 🎨 Premium Interface: Dark, modern design focused on user experience.
 
 ---
 
-## 🛠️ Como Executar o Aplicativo
+## 🛠️ How to Run the Application
 
-Este é um projeto desenvolvido com [Next.js](https://nextjs.org/).
+This is a project developed with [Next.js](https://nextjs.org/).
 
-### Passo 1: Instalar dependências
-No terminal, na raiz do projeto, execute:
+### Step 1: Install dependencies
+In the terminal, at the root of the project, run:
 ```bash
 npm install
 ```
 
-### Passo 2: Iniciar o servidor de desenvolvimento
+### Step 2: Start the development server
 ```bash
 npm run dev
 ```
 
-### Passo 3: Acessar no navegador
-Abra [http://localhost:3000](http://localhost:3000) para ver o Screenora em ação.
+### Step 3: Access in the browser
+Open [http://localhost:3000](http://localhost:3000) to see Screenora in action.
 
 ---
 
-## 🔌 Como Instalar a Extensão (Necessário para carregar sites externos)
+## 🔌 How to Install the Extension (Required to load external sites)
 
-Para que o Screenora consiga carregar sites que bloqueiam `iframes`, instale a extensão que está na pasta `extension Screenora`:
+For Screenora to be able to load sites that block `iframes`, install the extension located in the `extension Screenora` folder:
 
-1. Abra o Google Chrome.
-2. Acesse `chrome://extensions/` (ou vá em Menu > Mais ferramentas > Extensões).
-3. Ative o **"Modo do desenvolvedor"** no canto superior direito.
-4. Clique em **"Carregar sem compactação"** no canto superior esquerdo.
-5. Selecione a pasta `extension Screenora` que está dentro deste projeto.
-6. Pronto! Agora você pode testar qualquer URL no Screenora.
+1. Open Google Chrome.
+2. Go to `chrome://extensions/` (or go to Menu > More Tools > Extensions).
+3. Enable **"Developer mode"** in the top right corner.
+4. Click **"Load unpacked"** in the top left corner.
+5. Select the `extension Screenora` folder inside this project.
+6. Ready! Now you can test any URL in Screenora.
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está sob a licença **MIT**. Sinta-se livre para usar, modificar e distribuir.
+This project is under the **MIT** license. Feel free to use, modify, and distribute.
