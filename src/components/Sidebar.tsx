@@ -7,8 +7,7 @@ import {
   Smartphone, 
   Tablet, 
   Monitor, 
-  Settings, 
-  Crown
+  Settings
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -137,19 +136,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Upgrade Card */}
-      <div className="bg-[#141417] border border-[#1f1f23] rounded-xl p-4 flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Crown className="w-5 h-5 text-accent" />
-          <span className="font-bold text-sm text-foreground">Upgrade to Pro</span>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          Unlock unlimited devices, custom backgrounds and more powerful features.
-        </p>
-        <button className="w-full bg-[#1a1a1e] hover:bg-accent hover:text-background border border-[#27272a] hover:border-accent rounded-lg py-2 text-xs font-semibold text-foreground transition-all duration-200">
-          Upgrade Now
-        </button>
-      </div>
+
 
       {/* Footer */}
       <div className="flex items-center justify-between px-2 pt-2 border-t border-[#1f1f23]">
