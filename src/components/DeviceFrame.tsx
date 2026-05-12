@@ -21,6 +21,34 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
+  const [htmlContent, setHtmlContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (url.includes('localhost') || url.includes('127.0.0.1')) {
+      setIsLoading(true);
+      setHasError(false);
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const baseTag = `<base href="${url}">`;
+          let modifiedHtml = html;
+          if (html.includes('<head>')) {
+            modifiedHtml = html.replace('<head>', `<head>${baseTag}`);
+          } else {
+            modifiedHtml = baseTag + html;
+          }
+          setHtmlContent(modifiedHtml);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.error('Fetch failed:', err);
+          setHasError(true);
+          setIsLoading(false);
+        });
+    } else {
+      setHtmlContent(null);
+    }
+  }, [url]);
 
   useEffect(() => {
     if ((isExtendedMode || isSyncScrollMode) && !isLoading) {
@@ -146,7 +174,8 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
         <iframe
           id={`iframe-${device.id}`}
-          src={url.includes('localhost') || url.includes('127.0.0.1') ? url : `/api/proxy?url=${encodeURIComponent(url)}`}
+          src={htmlContent ? undefined : (url.includes('localhost') || url.includes('127.0.0.1') ? url : `/api/proxy?url=${encodeURIComponent(url)}`)}
+          srcDoc={htmlContent || undefined}
           className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           style={{
             height: isSyncScrollMode ? `${iframeHeight || 3000}px` : '100%',
