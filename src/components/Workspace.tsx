@@ -4,12 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import DeviceFrame from './DeviceFrame';
 import { motion } from 'framer-motion';
-import { Plus, Minimize2 } from 'lucide-react';
+import { Plus, Minimize2, Lock, Unlock } from 'lucide-react';
 
 export default function Workspace() {
   const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, isFullscreen, setFullscreen } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
+  const [isControlsSticky, setIsControlsSticky] = useState(true);
 
   useEffect(() => {
     const closeMenu = () => setContextMenu(null);
@@ -102,7 +103,7 @@ export default function Workspace() {
       }}
     >
       {/* Controls Row */}
-      <div className="flex items-center gap-4 mb-6 z-10">
+      <div className={`flex items-center gap-4 mb-6 ${isControlsSticky ? 'sticky top-0 left-0 z-20 bg-[#050505] py-2' : 'z-10'}`}>
         {/* Workflow Tabs */}
         <div className="flex items-center gap-2 bg-[#0c0c0e]/80 backdrop-blur-sm p-1.5 rounded-lg border border-[#1f1f23] w-max">
           {workflows.map((wf) => (
@@ -142,9 +143,16 @@ export default function Workspace() {
               onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
               className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
             />
-
           </div>
         )}
+
+        <button 
+          onClick={() => setIsControlsSticky(!isControlsSticky)}
+          className="p-2 hover:bg-[#141417] rounded-md text-muted-foreground hover:text-foreground transition-colors"
+          title={isControlsSticky ? "Desafixar Controles" : "Fixar Controles"}
+        >
+          {isControlsSticky ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
+        </button>
       </div>
 
       <motion.div 
