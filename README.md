@@ -1,4 +1,4 @@
-# Screenora 📱💻📺
+# Screenora 📱💻
 
 <p align="center">
   <img src="screenora-capa.png" alt="Screenora Cover" width="100%">
