@@ -76,12 +76,10 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
             modifiedHtml = baseTag + scriptTag + html;
           }
           setHtmlContent(modifiedHtml);
-          setIsLoading(false);
         })
         .catch(err => {
           console.error('Fetch failed:', err);
           setHasError(true);
-          setIsLoading(false);
         });
     } else {
       setHtmlContent(null);
