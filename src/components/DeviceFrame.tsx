@@ -17,11 +17,22 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
+  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'NAVIGATE') {
+        setUrl(event.data.url);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [setUrl]);
 
   useEffect(() => {
     if (url.includes('localhost') || url.includes('127.0.0.1')) {
@@ -32,11 +43,24 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         .then(html => {
           const baseTag = `<base href="${url}">`;
           const scriptTag = `<script>
-            const noop = () => {};
-            try {
-              window.history.pushState = noop;
-              window.history.replaceState = noop;
-            } catch (e) {}
+            document.addEventListener('click', function(e) {
+              const target = e.target.closest('a');
+              if (target && target.href) {
+                const href = target.href;
+                const currentUrl = new URL(${JSON.stringify(url)});
+                const clickedUrl = new URL(href, ${JSON.stringify(url)});
+                
+                if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
+                  return;
+                }
+                
+                e.preventDefault();
+                window.parent.postMessage({
+                  type: 'NAVIGATE',
+                  url: href
+                }, '*');
+              }
+            });
           </script>`;
           let modifiedHtml = html;
           if (html.includes('<head>')) {
@@ -191,6 +215,31 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
           }}
           onLoad={() => {
             setIsLoading(false);
+            
+            // Try to attach click listener for navigation sync
+            const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
+            if (iframe && iframe.contentWindow) {
+              try {
+                iframe.contentWindow.document.addEventListener('click', (e) => {
+                  const target = (e.target as HTMLElement).closest('a');
+                  if (target && target.href) {
+                    const href = target.href;
+                    const currentUrl = new URL(url);
+                    const clickedUrl = new URL(href, url);
+                    
+                    if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
+                      return;
+                    }
+                    
+                    e.preventDefault();
+                    setUrl(href);
+                  }
+                });
+              } catch (e) {
+                console.log("Failed to attach click listener (likely cross-origin)", e);
+              }
+            }
+
             if (isExtendedMode || isSyncScrollMode) {
               setTimeout(() => {
                 const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
