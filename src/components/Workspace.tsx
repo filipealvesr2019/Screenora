@@ -17,6 +17,26 @@ export default function Workspace() {
     return () => window.removeEventListener('click', closeMenu);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isSyncScrollMode) return;
+      
+      const step = 50; // Amount to scroll per key press
+      if (e.key === 'ArrowDown') {
+        const newScrollTop = Math.min(globalScrollTop + step, maxContentHeight);
+        setGlobalScrollTop(newScrollTop);
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp') {
+        const newScrollTop = Math.max(globalScrollTop - step, 0);
+        setGlobalScrollTop(newScrollTop);
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSyncScrollMode, globalScrollTop, maxContentHeight, setGlobalScrollTop]);
+
   const handleContextMenu = (e: React.MouseEvent, workflowId: string) => {
     e.preventDefault();
     if (['mobile', 'tablet', 'desktop'].includes(workflowId)) return;
