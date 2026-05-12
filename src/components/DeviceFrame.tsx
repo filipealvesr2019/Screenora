@@ -31,11 +31,18 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         .then(res => res.text())
         .then(html => {
           const baseTag = `<base href="${url}">`;
+          const scriptTag = `<script>
+            const noop = () => {};
+            try {
+              window.history.pushState = noop;
+              window.history.replaceState = noop;
+            } catch (e) {}
+          </script>`;
           let modifiedHtml = html;
           if (html.includes('<head>')) {
-            modifiedHtml = html.replace('<head>', `<head>${baseTag}`);
+            modifiedHtml = html.replace('<head>', `<head>${baseTag}${scriptTag}`);
           } else {
-            modifiedHtml = baseTag + html;
+            modifiedHtml = baseTag + scriptTag + html;
           }
           setHtmlContent(modifiedHtml);
           setIsLoading(false);
