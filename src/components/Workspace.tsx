@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -37,6 +37,22 @@ export default function Workspace() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isSyncScrollMode, globalScrollTop, maxContentHeight, setGlobalScrollTop]);
 
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.05 : -0.05;
+        const newZoom = Math.min(Math.max(globalZoom + delta, 0.25), 2);
+        setGlobalZoom(newZoom);
+      }
+    };
+    const workspace = document.getElementById('workspace');
+    if (workspace) {
+      workspace.addEventListener('wheel', handleWheel, { passive: false });
+      return () => workspace.removeEventListener('wheel', handleWheel);
+    }
+  }, [globalZoom, setGlobalZoom]);
+
   const handleContextMenu = (e: React.MouseEvent, workflowId: string) => {
     e.preventDefault();
     if (['mobile', 'tablet', 'desktop'].includes(workflowId)) return;
@@ -48,6 +64,7 @@ export default function Workspace() {
 
   return (
     <div 
+      id="workspace"
       className={`flex-1 overflow-auto custom-scrollbar p-10 relative flex flex-col ${
         isGrid ? 'bg-grid' : 'bg-[#050505]'
       }`}
@@ -58,7 +75,7 @@ export default function Workspace() {
         backgroundSize: '32px 32px',
       }}
       onWheel={(e) => {
-        if (isSyncScrollMode && e.deltaY !== 0) {
+        if (isSyncScrollMode && e.deltaY !== 0 && !e.ctrlKey) {
           const newScrollTop = Math.min(Math.max(globalScrollTop + e.deltaY, 0), maxContentHeight);
           setGlobalScrollTop(newScrollTop);
         }
@@ -113,7 +130,7 @@ export default function Workspace() {
       <motion.div 
         className={`flex gap-10 items-start ${isSyncScrollMode ? 'sticky top-10' : ''}`}
         style={{ 
-          transform: `scale(${globalZoom})`,
+          scale: globalZoom,
           transformOrigin: 'top left'
         }}
         layout

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
+  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
@@ -67,7 +67,19 @@ export default function Topbar() {
             <span>{Math.round(globalZoom * 100)}%</span>
             <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </button>
-          {/* Dropdown would go here */}
+          <div className="absolute top-full right-0 mt-1 w-32 bg-[#0c0c0e] border border-[#1f1f23] rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
+            {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 2].map((zoom) => (
+              <button
+                key={zoom}
+                onClick={() => setGlobalZoom(zoom)}
+                className={`w-full text-left px-4 py-1.5 text-sm hover:bg-[#141417] transition-colors ${
+                  globalZoom === zoom ? 'text-accent font-semibold' : 'text-foreground'
+                }`}
+              >
+                {Math.round(zoom * 100)}%
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Grid Toggle */}
