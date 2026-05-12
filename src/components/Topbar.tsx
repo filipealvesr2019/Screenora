@@ -122,14 +122,6 @@ export default function Topbar() {
         >
           <Maximize2 className="w-5 h-5" />
         </button>
-
-        {/* Theme (Quick toggle) */}
-        <button 
-          className="p-2 bg-[#141417] border border-[#1f1f23] hover:border-[#27272a] text-muted-foreground hover:text-foreground rounded-lg transition-colors"
-          title="Theme"
-        >
-          <Moon className="w-5 h-5 fill-current" />
-        </button>
       </div>
     </div>
   );
