@@ -174,7 +174,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
         <iframe
           id={`iframe-${device.id}`}
-          src={htmlContent ? undefined : (url.includes('localhost') || url.includes('127.0.0.1') ? url : `/api/proxy?url=${encodeURIComponent(url)}`)}
+          src={htmlContent ? undefined : `/api/proxy?url=${encodeURIComponent(url)}`}
           srcDoc={htmlContent || undefined}
           className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           style={{
