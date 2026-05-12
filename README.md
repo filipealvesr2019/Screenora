@@ -6,8 +6,6 @@
 
 O **Screenora** é uma ferramenta avançada de visualização responsiva que permite testar seus sites e aplicações em múltiplos dispositivos simulados simultaneamente. Ideal para desenvolvedores e designers que precisam garantir a qualidade visual em qualquer tela.
 
-Este repositório também inclui a **Extensão Screenora Helper**, necessária para contornar restrições de segurança (como `X-Frame-Options` e `CSP`) e permitir a visualização de qualquer site dentro da plataforma.
-
 ---
 
 ## ✨ Funcionalidades Principais
