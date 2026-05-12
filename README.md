@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Screenora 📱💻📺
 
-## Getting Started
+<p align="center">
+  <img src="screenora-capa.png" alt="Screenora Cover" width="100%">
+</p>
 
-First, run the development server:
+O **Screenora** é uma ferramenta avançada de visualização responsiva que permite testar seus sites e aplicações em múltiplos dispositivos simulados simultaneamente. Ideal para desenvolvedores e designers que precisam garantir a qualidade visual em qualquer tela.
 
+Este repositório também inclui a **Extensão Screenora Helper**, necessária para contornar restrições de segurança (como `X-Frame-Options` e `CSP`) e permitir a visualização de qualquer site dentro da plataforma.
+
+---
+
+## ✨ Funcionalidades Principais
+
+- 🔄 **Visualização Simultânea:** Teste layouts em resoluções de Mobile, Tablet e Desktop lado a lado.
+- 📜 **Universal Scroll:** Role a página em um dispositivo e todos os outros rolarão sincronizados.
+- 🧩 **Extensão Dedicada:** Remove cabeçalhos de bloqueio de iframe para carregar qualquer URL.
+- 🎨 **Interface Premium:** Design escuro, moderno e focado na experiência do usuário.
+
+---
+
+## 🛠️ Como Executar o Aplicativo
+
+Este é um projeto desenvolvido com [Next.js](https://nextjs.org/).
+
+### Passo 1: Instalar dependências
+No terminal, na raiz do projeto, execute:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Passo 2: Iniciar o servidor de desenvolvimento
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Passo 3: Acessar no navegador
+Abra [http://localhost:3000](http://localhost:3000) para ver o Screenora em ação.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔌 Como Instalar a Extensão (Necessário para carregar sites externos)
 
-To learn more about Next.js, take a look at the following resources:
+Para que o Screenora consiga carregar sites que bloqueiam `iframes`, instale a extensão que está na pasta `extension Screenora`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Abra o Google Chrome.
+2. Acesse `chrome://extensions/` (ou vá em Menu > Mais ferramentas > Extensões).
+3. Ative o **"Modo do desenvolvedor"** no canto superior direito.
+4. Clique em **"Carregar sem compactação"** no canto superior esquerdo.
+5. Selecione a pasta `extension Screenora` que está dentro deste projeto.
+6. Pronto! Agora você pode testar qualquer URL no Screenora.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📄 Licença
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este projeto está sob a licença **MIT**. Sinta-se livre para usar, modificar e distribuir.
