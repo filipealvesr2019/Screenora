@@ -144,7 +144,7 @@ export const useStore = create<AppState>((set) => ({
   toggleExtendedMode: () => set((state) => ({ isExtendedMode: !state.isExtendedMode })),
   selectedCategory: null,
   setSelectedCategory: (category) => set({ selectedCategory: category }),
-  isSyncScrollMode: false,
+  isSyncScrollMode: true,
   toggleSyncScrollMode: () => set((state) => ({ isSyncScrollMode: !state.isSyncScrollMode })),
   globalScrollTop: 0,
   setGlobalScrollTop: (globalScrollTop) => set({ globalScrollTop }),
