@@ -10,7 +10,7 @@ export default function Workspace() {
   const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, isFullscreen, setFullscreen } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
-  const [isControlsSticky, setIsControlsSticky] = useState(true);
+  const [isControlsSticky, setIsControlsSticky] = useState(false);
 
   useEffect(() => {
     const closeMenu = () => setContextMenu(null);
