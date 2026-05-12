@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, setGlobalScrollTop, maxContentHeight } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -28,7 +28,7 @@ export default function Workspace() {
 
   return (
     <div 
-      className={`flex-1 overflow-auto custom-scrollbar p-10 relative flex flex-col ${
+      className={`flex-1 ${isSyncScrollMode ? 'overflow-y-hidden overflow-x-auto' : 'overflow-auto'} custom-scrollbar p-10 relative flex flex-col ${
         isGrid ? 'bg-grid' : 'bg-[#050505]'
       }`}
       style={{
@@ -37,9 +37,10 @@ export default function Workspace() {
           : 'none',
         backgroundSize: '32px 32px',
       }}
-      onScroll={(e) => {
-        if (isSyncScrollMode) {
-          setGlobalScrollTop(e.currentTarget.scrollTop);
+      onWheel={(e) => {
+        if (isSyncScrollMode && e.deltaY !== 0) {
+          const newScrollTop = Math.min(Math.max(globalScrollTop + e.deltaY, 0), maxContentHeight);
+          setGlobalScrollTop(newScrollTop);
         }
       }}
     >
@@ -71,6 +72,20 @@ export default function Workspace() {
         </button>
       </div>
 
+      {isSyncScrollMode && (
+        <div className="mb-6 bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-lg flex items-center gap-3 mx-auto z-10">
+          <span className="text-xs text-muted-foreground font-medium">Scroll Universal</span>
+          <input
+            type="range"
+            min={0}
+            max={maxContentHeight}
+            value={globalScrollTop}
+            onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
+            className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
+          />
+        </div>
+      )}
+
       <motion.div 
         className={`flex gap-10 items-start ${isSyncScrollMode ? 'sticky top-10' : ''}`}
         style={{ 
@@ -98,9 +113,7 @@ export default function Workspace() {
         )}
       </motion.div>
 
-      {isSyncScrollMode && (
-        <div style={{ height: `${maxContentHeight}px`, width: '1px', pointerEvents: 'none' }} />
-      )}
+      {/* Removed dummy div for sync scroll */}
 
       {contextMenu && (
         <div 

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode } = useStore();
+  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
@@ -81,6 +81,19 @@ export default function Topbar() {
           title="Toggle Grid"
         >
           <LayoutGrid className="w-5 h-5" />
+        </button>
+
+        {/* Sync Scroll Toggle */}
+        <button 
+          onClick={toggleSyncScrollMode}
+          className={`p-2 rounded-lg border transition-colors ${
+            isSyncScrollMode 
+              ? 'bg-accent/10 border-accent text-accent' 
+              : 'bg-[#141417] border-[#1f1f23] text-muted-foreground hover:text-foreground'
+          }`}
+          title="Toggle Sync Scroll"
+        >
+          <ChevronsDown className="w-5 h-5" />
         </button>
 
 

@@ -57,7 +57,11 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
   const width = device.isRotated ? device.height : device.width;
   const baseHeight = device.isRotated ? device.width : device.height;
-  const height = isExtendedMode ? (iframeHeight || 3000) : baseHeight;
+  const height = (isExtendedMode && !isSyncScrollMode) ? (iframeHeight || 3000) : baseHeight;
+
+  const percentage = globalScrollTop / maxContentHeight;
+  const maxScroll = (iframeHeight || 3000) - baseHeight;
+  const myTranslate = percentage * maxScroll;
 
   return (
     <div className="flex-shrink-0 flex flex-col gap-3">
@@ -142,11 +146,16 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
         <iframe
           id={`iframe-${device.id}`}
-          src={url}
-          className={`w-full h-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+          src={`/api/proxy?url=${encodeURIComponent(url)}`}
+          className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+          style={{
+            height: isSyncScrollMode ? `${iframeHeight || 3000}px` : '100%',
+            transform: isSyncScrollMode ? `translateY(-${myTranslate}px)` : 'none',
+            pointerEvents: isSyncScrollMode ? 'none' : 'auto',
+          }}
           onLoad={() => {
             setIsLoading(false);
-            if (isExtendedMode) {
+            if (isExtendedMode || isSyncScrollMode) {
               setTimeout(() => {
                 const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
                 if (iframe && iframe.contentWindow) {
@@ -165,7 +174,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
             setHasError(true);
           }}
           sandbox="allow-scripts allow-same-origin"
-          scrolling={isExtendedMode ? 'no' : 'auto'}
+          scrolling={(isExtendedMode || isSyncScrollMode) ? 'no' : 'auto'}
         />
       </div>
     </div>
