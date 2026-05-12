@@ -8,7 +8,6 @@ import {
   Tablet, 
   Monitor, 
   Settings, 
-  Sun, 
   Crown
 } from 'lucide-react';
 
@@ -157,9 +156,7 @@ export default function Sidebar() {
         <button className="text-muted-foreground hover:text-foreground transition-colors">
           <Settings className="w-5 h-5" />
         </button>
-        <button className="text-muted-foreground hover:text-foreground transition-colors">
-          <Sun className="w-5 h-5" />
-        </button>
+
         <div className="w-8 h-8 bg-[#1a1a1e] rounded-full flex items-center justify-center text-xs font-bold text-foreground border border-[#27272a]">
           JD
         </div>
