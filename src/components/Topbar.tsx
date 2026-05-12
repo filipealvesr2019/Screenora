@@ -61,9 +61,9 @@ export default function Topbar() {
           />
           <button
             type="button"
-            onClick={triggerReload}
+            onClick={() => window.location.reload()}
             className="text-muted-foreground hover:text-foreground transition-colors p-1"
-            title="Reload all pages"
+            title="Reload app"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
