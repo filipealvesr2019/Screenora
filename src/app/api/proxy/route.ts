@@ -16,14 +16,22 @@ export async function GET(request: NextRequest) {
     // We try to insert it right after <head>
     let modifiedHtml = html;
     const baseTag = `<base href="${url}">`;
+
+    const scriptTag = `<script>
+      // Prevent SecurityError when framed app tries to modify history on different origin
+      const noop = () => {};
+      try {
+        window.history.pushState = noop;
+        window.history.replaceState = noop;
+      } catch (e) {}
+    </script>`;
     
     if (html.includes('<head>')) {
-      modifiedHtml = html.replace('<head>', `<head>${baseTag}`);
+      modifiedHtml = html.replace('<head>', `<head>${baseTag}${scriptTag}`);
     } else if (html.includes('<HEAD>')) {
-      modifiedHtml = html.replace('<HEAD>', `<HEAD>${baseTag}`);
+      modifiedHtml = html.replace('<HEAD>', `<HEAD>${baseTag}${scriptTag}`);
     } else {
-      // If no head, just prepend it
-      modifiedHtml = baseTag + html;
+      modifiedHtml = baseTag + scriptTag + html;
     }
 
     return new NextResponse(modifiedHtml, {
