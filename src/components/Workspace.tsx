@@ -7,95 +7,15 @@ import { motion } from 'framer-motion';
 import { Plus, Minimize2 } from 'lucide-react';
 
 export default function Workspace() {
-  const { 
-    workflows, 
-    currentWorkflowId, 
-    setCurrentWorkflowId, 
-    addWorkflow, 
-    removeWorkflow, 
-    isGrid, 
-    globalZoom, 
-    setGlobalZoom, 
-    isSyncScrollMode, 
-    globalScrollTop, 
-    setGlobalScrollTop, 
-    maxContentHeight, 
-    isFullscreen, 
-    setFullscreen,
-    url,
-    reloadKey,
-    incrementLoadingCount,
-    decrementLoadingCount
-  } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, isFullscreen, setFullscreen } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
-  const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
   useEffect(() => {
     const closeMenu = () => setContextMenu(null);
     window.addEventListener('click', closeMenu);
     return () => window.removeEventListener('click', closeMenu);
   }, []);
-
-  useEffect(() => {
-    if (!url) return;
-    
-    const fetchContent = async () => {
-      incrementLoadingCount();
-      try {
-        let html = '';
-        if (url.includes('localhost') || url.includes('127.0.0.1')) {
-          const res = await fetch(url);
-          html = await res.text();
-          
-          const baseTag = `<base href="${url}">`;
-          const scriptTag = `<script>
-            const noop = () => {};
-            try {
-              window.history.pushState = noop;
-              window.history.replaceState = noop;
-            } catch (e) {}
-
-            document.addEventListener('click', function(e) {
-              const target = e.target.closest('a');
-              if (target && target.href) {
-                const href = target.href;
-                const currentUrl = new URL(${JSON.stringify(url)});
-                const clickedUrl = new URL(href, ${JSON.stringify(url)});
-                
-                if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
-                  return;
-                }
-                
-                e.preventDefault();
-                window.parent.postMessage({
-                  type: 'NAVIGATE',
-                  url: href
-                }, '*');
-              }
-            });
-          </script>`;
-          
-          if (html.includes('<head>')) {
-            html = html.replace('<head>', `<head>${baseTag}${scriptTag}`);
-          } else {
-            html = baseTag + scriptTag + html;
-          }
-        } else {
-          const res = await fetch(`/api/proxy?url=${encodeURIComponent(url)}`);
-          html = await res.text();
-        }
-        setHtmlContent(html);
-      } catch (error) {
-        console.error('Failed to fetch content:', error);
-        setHtmlContent(null);
-      } finally {
-        decrementLoadingCount();
-      }
-    };
-
-    fetchContent();
-  }, [url, reloadKey, incrementLoadingCount, decrementLoadingCount]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -249,7 +169,7 @@ export default function Workspace() {
           </div>
         ) : (
           devices.map((device) => (
-            <DeviceFrame key={device.id} device={device} htmlContent={htmlContent} />
+            <DeviceFrame key={device.id} device={device} />
           ))
         )}
       </motion.div>
