@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import DeviceFrame from './DeviceFrame';
 import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { Plus, Minimize2 } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, setGlobalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, isFullscreen, setFullscreen } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -52,6 +52,26 @@ export default function Workspace() {
       return () => workspace.removeEventListener('wheel', handleWheel);
     }
   }, [globalZoom, setGlobalZoom]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [setFullscreen]);
+
+  useEffect(() => {
+    if (isFullscreen) {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      }
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(err => console.log(err));
+      }
+    }
+  }, [isFullscreen]);
 
   const handleContextMenu = (e: React.MouseEvent, workflowId: string) => {
     e.preventDefault();
@@ -173,6 +193,16 @@ export default function Workspace() {
             Delete
           </button>
         </div>
+      )}
+
+      {isFullscreen && (
+        <button 
+          onClick={() => setFullscreen(false)}
+          className="fixed top-4 right-4 bg-[#141417] border border-[#1f1f23] text-muted-foreground hover:text-foreground p-2 rounded-lg z-50 shadow-2xl transition-colors"
+          title="Exit Fullscreen"
+        >
+          <Minimize2 className="w-5 h-5" />
+        </button>
       )}
     </div>
   );

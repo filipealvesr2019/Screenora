@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
+  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
@@ -112,8 +112,12 @@ export default function Topbar() {
 
         {/* Fullscreen */}
         <button 
-          onClick={() => setFullscreen(true)}
-          className="p-2 bg-[#141417] border border-[#1f1f23] hover:border-[#27272a] text-muted-foreground hover:text-foreground rounded-lg transition-colors"
+          onClick={() => setFullscreen(!isFullscreen)}
+          className={`p-2 rounded-lg border transition-colors ${
+            isFullscreen 
+              ? 'bg-accent/10 border-accent text-accent' 
+              : 'bg-[#141417] border-[#1f1f23] text-muted-foreground hover:text-foreground'
+          }`}
           title="Toggle Fullscreen"
         >
           <Maximize2 className="w-5 h-5" />
