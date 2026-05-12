@@ -13,14 +13,14 @@ import {
 
 interface DeviceFrameProps {
   device: Device;
+  htmlContent: string | null;
 }
 
-export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight, incrementLoadingCount, decrementLoadingCount, reloadKey } = useStore();
+export default function DeviceFrame({ device, htmlContent }: DeviceFrameProps) {
+  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight, incrementLoadingCount, decrementLoadingCount } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
-  const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -43,59 +43,12 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
     setHasError(false);
     incrementLoadingCount();
     
-    if (url.includes('localhost') || url.includes('127.0.0.1')) {
-      fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const baseTag = `<base href="${url}">`;
-          const scriptTag = `<script>
-            const noop = () => {};
-            try {
-              window.history.pushState = noop;
-              window.history.replaceState = noop;
-            } catch (e) {}
-
-            document.addEventListener('click', function(e) {
-              const target = e.target.closest('a');
-              if (target && target.href) {
-                const href = target.href;
-                const currentUrl = new URL(${JSON.stringify(url)});
-                const clickedUrl = new URL(href, ${JSON.stringify(url)});
-                
-                if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
-                  return;
-                }
-                
-                e.preventDefault();
-                window.parent.postMessage({
-                  type: 'NAVIGATE',
-                  url: href
-                }, '*');
-              }
-            });
-          </script>`;
-          let modifiedHtml = html;
-          if (html.includes('<head>')) {
-            modifiedHtml = html.replace('<head>', `<head>${baseTag}${scriptTag}`);
-          } else {
-            modifiedHtml = baseTag + scriptTag + html;
-          }
-          setHtmlContent(modifiedHtml);
-        })
-        .catch(err => {
-          console.error('Fetch failed:', err);
-          setHasError(true);
-        });
-    } else {
-      setHtmlContent(null);
-    }
-
     return () => {
       if (isLoadingRef.current) {
         decrementLoadingCount();
       }
     };
-  }, [url, reloadKey]);
+  }, [htmlContent, incrementLoadingCount, decrementLoadingCount]);
 
   useEffect(() => {
     if ((isExtendedMode || isSyncScrollMode) && !isLoading) {
@@ -213,7 +166,6 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
         <iframe
           id={`iframe-${device.id}`}
-          src={htmlContent ? undefined : `/api/proxy?url=${encodeURIComponent(url)}`}
           srcDoc={htmlContent || undefined}
           className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           style={{
