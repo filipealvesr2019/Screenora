@@ -41,18 +41,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
     }
   }, [isExtendedMode, isSyncScrollMode, isLoading, device.id, maxContentHeight, setMaxContentHeight]);
 
-  useEffect(() => {
-    if (isSyncScrollMode && !isExtendedMode) {
-      const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
-      if (iframe && iframe.contentWindow) {
-        try {
-          iframe.contentWindow.scrollTo(0, globalScrollTop);
-        } catch (e) {
-          // Ignore CORS errors
-        }
-      }
-    }
-  }, [isSyncScrollMode, isExtendedMode, globalScrollTop, device.id]);
+
 
   const toggleRotate = () => {
     updateDevice(device.id, { isRotated: !device.isRotated });
