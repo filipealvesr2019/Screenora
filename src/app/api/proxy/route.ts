@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(modifiedHtml, {
       headers: {
         'Content-Type': 'text/html',
+        'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=59',
       },
     });
   } catch (error) {
