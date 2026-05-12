@@ -44,47 +44,50 @@ export default function Workspace() {
         }
       }}
     >
-      {/* Workflow Tabs */}
-      <div className="flex items-center gap-2 mb-6 bg-[#0c0c0e]/80 backdrop-blur-sm p-1.5 rounded-lg border border-[#1f1f23] w-max z-10">
-        {workflows.map((wf) => (
-          <button
-            key={wf.id}
-            onClick={() => setCurrentWorkflowId(wf.id)}
-            onContextMenu={(e) => handleContextMenu(e, wf.id)}
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              currentWorkflowId === wf.id
-                ? 'bg-accent text-background'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
+      {/* Controls Row */}
+      <div className="flex items-center gap-4 mb-6 z-10">
+        {/* Workflow Tabs */}
+        <div className="flex items-center gap-2 bg-[#0c0c0e]/80 backdrop-blur-sm p-1.5 rounded-lg border border-[#1f1f23] w-max">
+          {workflows.map((wf) => (
+            <button
+              key={wf.id}
+              onClick={() => setCurrentWorkflowId(wf.id)}
+              onContextMenu={(e) => handleContextMenu(e, wf.id)}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                currentWorkflowId === wf.id
+                  ? 'bg-accent text-background'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {wf.name}
+            </button>
+          ))}
+          <button 
+            onClick={() => {
+              const name = prompt('Enter workflow name:');
+              if (name) addWorkflow(name);
+            }}
+            className="p-1.5 hover:bg-[#141417] rounded-md text-muted-foreground hover:text-foreground transition-colors"
+            title="Add Workflow"
           >
-            {wf.name}
+            <Plus className="w-4 h-4" />
           </button>
-        ))}
-        <button 
-          onClick={() => {
-            const name = prompt('Enter workflow name:');
-            if (name) addWorkflow(name);
-          }}
-          className="p-1.5 hover:bg-[#141417] rounded-md text-muted-foreground hover:text-foreground transition-colors"
-          title="Add Workflow"
-        >
-          <Plus className="w-4 h-4" />
-        </button>
-      </div>
-
-      {isSyncScrollMode && (
-        <div className="mb-6 bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-lg flex items-center gap-3 mx-auto z-10">
-          <span className="text-xs text-muted-foreground font-medium">Scroll Universal</span>
-          <input
-            type="range"
-            min={0}
-            max={maxContentHeight}
-            value={globalScrollTop}
-            onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
-            className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
-          />
         </div>
-      )}
+
+        {isSyncScrollMode && (
+          <div className="bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-lg flex items-center gap-3">
+            <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Scroll Universal</span>
+            <input
+              type="range"
+              min={0}
+              max={maxContentHeight}
+              value={globalScrollTop}
+              onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
+              className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
+            />
+          </div>
+        )}
+      </div>
 
       <motion.div 
         className={`flex gap-10 items-start ${isSyncScrollMode ? 'sticky top-10' : ''}`}
