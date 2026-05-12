@@ -40,6 +40,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    return new NextResponse(`Error fetching URL: ${(error as Error).message}`, { status: 500 });
+    return new NextResponse('<div style="color: #a1a1aa; font-family: sans-serif; padding: 20px; text-align: center; font-weight: 500;">Page fail reload</div>', { 
+      status: 500,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+    });
   }
 }
