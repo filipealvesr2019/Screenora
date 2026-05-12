@@ -42,6 +42,12 @@ interface AppState {
   toggleExtendedMode: () => void;
   selectedCategory: DeviceType | null;
   setSelectedCategory: (category: DeviceType | null) => void;
+  isSyncScrollMode: boolean;
+  toggleSyncScrollMode: () => void;
+  globalScrollTop: number;
+  setGlobalScrollTop: (top: number) => void;
+  maxContentHeight: number;
+  setMaxContentHeight: (height: number) => void;
 }
 
 export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
@@ -128,4 +134,10 @@ export const useStore = create<AppState>((set) => ({
   toggleExtendedMode: () => set((state) => ({ isExtendedMode: !state.isExtendedMode })),
   selectedCategory: null,
   setSelectedCategory: (category) => set({ selectedCategory: category }),
+  isSyncScrollMode: false,
+  toggleSyncScrollMode: () => set((state) => ({ isSyncScrollMode: !state.isSyncScrollMode })),
+  globalScrollTop: 0,
+  setGlobalScrollTop: (globalScrollTop) => set({ globalScrollTop }),
+  maxContentHeight: 3000,
+  setMaxContentHeight: (height) => set({ maxContentHeight: height }),
 }));

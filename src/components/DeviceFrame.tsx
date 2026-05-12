@@ -17,26 +17,42 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, removeDevice, updateDevice, isExtendedMode } = useStore();
+  const { url, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
 
   useEffect(() => {
-    if (isExtendedMode && !isLoading) {
+    if ((isExtendedMode || isSyncScrollMode) && !isLoading) {
       setTimeout(() => {
         const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
         if (iframe && iframe.contentWindow) {
           try {
             const h = iframe.contentWindow.document.body.scrollHeight;
             setIframeHeight(h);
+            if (h > maxContentHeight) {
+              setMaxContentHeight(h);
+            }
           } catch (e) {
             console.log("Failed to read height", e);
           }
         }
       }, 500);
     }
-  }, [isExtendedMode, isLoading, device.id]);
+  }, [isExtendedMode, isSyncScrollMode, isLoading, device.id, maxContentHeight, setMaxContentHeight]);
+
+  useEffect(() => {
+    if (isSyncScrollMode && !isExtendedMode) {
+      const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
+      if (iframe && iframe.contentWindow) {
+        try {
+          iframe.contentWindow.scrollTo(0, globalScrollTop);
+        } catch (e) {
+          // Ignore CORS errors
+        }
+      }
+    }
+  }, [isSyncScrollMode, isExtendedMode, globalScrollTop, device.id]);
 
   const toggleRotate = () => {
     updateDevice(device.id, { isRotated: !device.isRotated });

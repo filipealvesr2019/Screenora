@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, setGlobalScrollTop, maxContentHeight } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -36,6 +36,11 @@ export default function Workspace() {
           ? 'radial-gradient(circle at 1px 1px, #1f1f23 1px, transparent 0)' 
           : 'none',
         backgroundSize: '32px 32px',
+      }}
+      onScroll={(e) => {
+        if (isSyncScrollMode) {
+          setGlobalScrollTop(e.currentTarget.scrollTop);
+        }
       }}
     >
       {/* Workflow Tabs */}
@@ -67,7 +72,7 @@ export default function Workspace() {
       </div>
 
       <motion.div 
-        className="flex gap-10 items-start"
+        className={`flex gap-10 items-start ${isSyncScrollMode ? 'sticky top-10' : ''}`}
         style={{ 
           transform: `scale(${globalZoom})`,
           transformOrigin: 'top left'
@@ -92,6 +97,10 @@ export default function Workspace() {
           ))
         )}
       </motion.div>
+
+      {isSyncScrollMode && (
+        <div style={{ height: `${maxContentHeight}px`, width: '1px', pointerEvents: 'none' }} />
+      )}
 
       {contextMenu && (
         <div 
