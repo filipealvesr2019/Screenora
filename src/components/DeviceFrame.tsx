@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { Device, useStore } from '@/store/useStore';
 import { 
-  RotateCw, 
   Trash2, 
   Smartphone, 
   Tablet, 
@@ -43,6 +42,12 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         .then(html => {
           const baseTag = `<base href="${url}">`;
           const scriptTag = `<script>
+            const noop = () => {};
+            try {
+              window.history.pushState = noop;
+              window.history.replaceState = noop;
+            } catch (e) {}
+
             document.addEventListener('click', function(e) {
               const target = e.target.closest('a');
               if (target && target.href) {
@@ -102,9 +107,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
 
 
-  const toggleRotate = () => {
-    updateDevice(device.id, { isRotated: !device.isRotated });
-  };
+
 
   const reloadIframe = () => {
     setIsLoading(true);
@@ -137,13 +140,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         </div>
         
         <div className="flex items-center gap-1.5">
-          <button 
-            onClick={toggleRotate}
-            className="p-1.5 hover:bg-[#1a1a1e] rounded-md text-muted-foreground hover:text-foreground transition-colors"
-            title="Rotate"
-          >
-            <RotateCw className="w-4 h-4" />
-          </button>
+
           <button 
             onClick={reloadIframe}
             className="p-1.5 hover:bg-[#1a1a1e] rounded-md text-muted-foreground hover:text-foreground transition-colors"
