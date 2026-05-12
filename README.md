@@ -10,10 +10,10 @@ O **Screenora** é uma ferramenta avançada de visualização responsiva que per
 
 ## ✨ Funcionalidades Principais
 
-- 🔄 **Visualização Simultânea:** Teste layouts em resoluções de Mobile, Tablet e Desktop lado a lado.
-- 📜 **Universal Scroll:** Role a página em um dispositivo e todos os outros rolarão sincronizados.
-- 🧩 **Extensão Dedicada:** Remove cabeçalhos de bloqueio de iframe para carregar qualquer URL.
-- 🎨 **Interface Premium:** Design escuro, moderno e focado na experiência do usuário.
+- 🔄 Visualização Simultânea: Teste layouts em resoluções de Mobile, Tablet e Desktop lado a lado.
+- 📜 Universal Scroll: Role a página em um dispositivo e todos os outros rolarão sincronizados.
+- 🧩 Extensão Dedicada: Remove cabeçalhos de bloqueio de iframe para carregar qualquer URL.
+- 🎨 Interface Premium: Design escuro, moderno e focado na experiência do usuário.
 
 ---
 
