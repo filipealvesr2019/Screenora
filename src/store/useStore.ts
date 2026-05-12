@@ -138,6 +138,6 @@ export const useStore = create<AppState>((set) => ({
   toggleSyncScrollMode: () => set((state) => ({ isSyncScrollMode: !state.isSyncScrollMode })),
   globalScrollTop: 0,
   setGlobalScrollTop: (globalScrollTop) => set({ globalScrollTop }),
-  maxContentHeight: 3000,
+  maxContentHeight: 10000,
   setMaxContentHeight: (height) => set({ maxContentHeight: height }),
 }));

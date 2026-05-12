@@ -85,10 +85,10 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
   const width = device.isRotated ? device.height : device.width;
   const baseHeight = device.isRotated ? device.width : device.height;
-  const height = (isExtendedMode && !isSyncScrollMode) ? (iframeHeight || 3000) : baseHeight;
+  const height = (isExtendedMode && !isSyncScrollMode) ? (iframeHeight || maxContentHeight) : baseHeight;
 
   const percentage = globalScrollTop / maxContentHeight;
-  const maxScroll = (iframeHeight || 3000) - baseHeight;
+  const maxScroll = (iframeHeight || maxContentHeight) - baseHeight;
   const myTranslate = percentage * maxScroll;
 
   return (
@@ -178,7 +178,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
           srcDoc={htmlContent || undefined}
           className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           style={{
-            height: isSyncScrollMode ? `${iframeHeight || 3000}px` : '100%',
+            height: isSyncScrollMode ? `${iframeHeight || maxContentHeight}px` : '100%',
             transform: isSyncScrollMode ? `translateY(-${myTranslate}px)` : 'none',
             pointerEvents: isSyncScrollMode ? 'none' : 'auto',
           }}
