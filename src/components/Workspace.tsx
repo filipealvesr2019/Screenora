@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -105,17 +105,7 @@ export default function Workspace() {
               onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
               className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
             />
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <span className="whitespace-nowrap">Max:</span>
-              <input
-                type="number"
-                value={maxContentHeight}
-                onChange={(e) => setMaxContentHeight(Number(e.target.value))}
-                className="w-16 bg-[#141417] text-foreground p-0.5 rounded border border-[#1f1f23] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                step={500}
-              />
-              <span>px</span>
-            </div>
+
           </div>
         )}
       </div>

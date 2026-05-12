@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
+  const { url, setUrl, globalZoom, isGrid, toggleGrid, setFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
