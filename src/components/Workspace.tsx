@@ -149,7 +149,7 @@ export default function Workspace() {
         <button 
           onClick={() => setIsControlsSticky(!isControlsSticky)}
           className="p-2 hover:bg-[#141417] rounded-md text-muted-foreground hover:text-foreground transition-colors"
-          title={isControlsSticky ? "Desafixar Controles" : "Fixar Controles"}
+          title={isControlsSticky ? "Unfix Controls" : "Fix Controls"}
         >
           {isControlsSticky ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
         </button>
