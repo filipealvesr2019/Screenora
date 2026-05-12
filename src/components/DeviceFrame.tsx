@@ -16,7 +16,7 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight, incrementLoadingCount, decrementLoadingCount } = useStore();
+  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight, incrementLoadingCount, decrementLoadingCount, reloadKey } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
@@ -95,7 +95,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
         decrementLoadingCount();
       }
     };
-  }, [url]);
+  }, [url, reloadKey]);
 
   useEffect(() => {
     if ((isExtendedMode || isSyncScrollMode) && !isLoading) {

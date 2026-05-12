@@ -51,6 +51,8 @@ interface AppState {
   loadingCount: number;
   incrementLoadingCount: () => void;
   decrementLoadingCount: () => void;
+  reloadKey: number;
+  triggerReload: () => void;
 }
 
 export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
@@ -69,6 +71,8 @@ export const useStore = create<AppState>((set) => ({
   loadingCount: 0,
   incrementLoadingCount: () => set((state) => ({ loadingCount: state.loadingCount + 1 })),
   decrementLoadingCount: () => set((state) => ({ loadingCount: Math.max(0, state.loadingCount - 1) })),
+  reloadKey: 0,
+  triggerReload: () => set((state) => ({ reloadKey: state.reloadKey + 1 })),
   workflows: [
     { 
       id: 'mobile', 

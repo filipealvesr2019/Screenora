@@ -11,11 +11,12 @@ import {
   Moon,
   Zap,
   ChevronsDown,
-  Link
+  Link,
+  RefreshCw
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop, loadingCount } = useStore();
+  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop, loadingCount, triggerReload } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
@@ -26,6 +27,10 @@ export default function Topbar() {
       setInputUrl(urlParam);
     }
   }, [setUrl]);
+
+  useEffect(() => {
+    setInputUrl(url);
+  }, [url]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +59,14 @@ export default function Topbar() {
             placeholder="Enter URL (e.g. https://example.com)"
             className="flex-1 bg-transparent border-none outline-none text-sm text-foreground placeholder:text-muted-foreground py-2.5"
           />
+          <button
+            type="button"
+            onClick={triggerReload}
+            className="text-muted-foreground hover:text-foreground transition-colors p-1"
+            title="Reload all pages"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
         </div>
         <button 
           type="submit"
@@ -107,13 +120,11 @@ export default function Topbar() {
             isSyncScrollMode 
               ? 'bg-accent/10 border-accent text-accent' 
               : 'bg-[#141417] border-[#1f1f23] text-muted-foreground hover:text-foreground'
-          }`}
+            }`}
           title="Toggle Sync Scroll"
         >
           <ChevronsDown className="w-5 h-5" />
         </button>
-
-
 
         {/* Fullscreen */}
         <button 
