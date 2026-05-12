@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Device, useStore } from '@/store/useStore';
 import { 
   Trash2, 
@@ -32,6 +32,11 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [setUrl]);
+
+  const isLoadingRef = useRef(isLoading);
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -84,6 +89,12 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
     } else {
       setHtmlContent(null);
     }
+
+    return () => {
+      if (isLoadingRef.current) {
+        decrementLoadingCount();
+      }
+    };
   }, [url]);
 
   useEffect(() => {
