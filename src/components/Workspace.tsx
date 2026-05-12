@@ -28,7 +28,7 @@ export default function Workspace() {
 
   return (
     <div 
-      className={`flex-1 ${isSyncScrollMode ? 'overflow-y-hidden overflow-x-auto' : 'overflow-auto'} custom-scrollbar p-10 relative flex flex-col ${
+      className={`flex-1 overflow-auto custom-scrollbar p-10 relative flex flex-col ${
         isGrid ? 'bg-grid' : 'bg-[#050505]'
       }`}
       style={{
