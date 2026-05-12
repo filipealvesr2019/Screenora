@@ -95,8 +95,8 @@ export default function Workspace() {
         </div>
 
         {isSyncScrollMode && (
-          <div className="bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-lg flex items-center gap-3">
-            <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Scroll Universal</span>
+          <div className="bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-4xl flex items-center gap-3">
+            <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Universal Scroll</span>
             <input
               type="range"
               min={0}
