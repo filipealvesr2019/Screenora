@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 
 export default function Workspace() {
-  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight } = useStore();
+  const { workflows, currentWorkflowId, setCurrentWorkflowId, addWorkflow, removeWorkflow, isGrid, globalZoom, isSyncScrollMode, globalScrollTop, setGlobalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
   
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, workflowId: string } | null>(null);
 
@@ -95,7 +95,7 @@ export default function Workspace() {
         </div>
 
         {isSyncScrollMode && (
-          <div className="bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-4xl flex items-center gap-3">
+          <div className="bg-[#0c0c0e]/80 backdrop-blur-sm p-3 rounded-lg border border-[#1f1f23] w-full max-w-5xl flex items-center gap-3">
             <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Universal Scroll</span>
             <input
               type="range"
@@ -105,6 +105,17 @@ export default function Workspace() {
               onChange={(e) => setGlobalScrollTop(Number(e.target.value))}
               className="flex-1 accent-accent h-1.5 bg-[#141417] rounded-full appearance-none cursor-pointer"
             />
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="whitespace-nowrap">Max:</span>
+              <input
+                type="number"
+                value={maxContentHeight}
+                onChange={(e) => setMaxContentHeight(Number(e.target.value))}
+                className="w-16 bg-[#141417] text-foreground p-0.5 rounded border border-[#1f1f23] text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                step={500}
+              />
+              <span>px</span>
+            </div>
           </div>
         )}
       </div>
