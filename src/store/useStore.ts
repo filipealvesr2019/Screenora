@@ -48,6 +48,9 @@ interface AppState {
   setGlobalScrollTop: (top: number) => void;
   maxContentHeight: number;
   setMaxContentHeight: (height: number) => void;
+  loadingCount: number;
+  incrementLoadingCount: () => void;
+  decrementLoadingCount: () => void;
 }
 
 export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
@@ -63,6 +66,9 @@ export const presets: Omit<Device, 'id' | 'isRotated' | 'zoom'>[] = [
 export const useStore = create<AppState>((set) => ({
   url: 'https://vercel.com',
   setUrl: (url) => set({ url }),
+  loadingCount: 0,
+  incrementLoadingCount: () => set((state) => ({ loadingCount: state.loadingCount + 1 })),
+  decrementLoadingCount: () => set((state) => ({ loadingCount: Math.max(0, state.loadingCount - 1) })),
   workflows: [
     { 
       id: 'mobile', 

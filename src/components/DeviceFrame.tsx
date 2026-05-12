@@ -16,7 +16,7 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ device }: DeviceFrameProps) {
-  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight } = useStore();
+  const { url, setUrl, removeDevice, updateDevice, isExtendedMode, isSyncScrollMode, globalScrollTop, maxContentHeight, setMaxContentHeight, incrementLoadingCount, decrementLoadingCount } = useStore();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
@@ -34,9 +34,11 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
   }, [setUrl]);
 
   useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
+    incrementLoadingCount();
+    
     if (url.includes('localhost') || url.includes('127.0.0.1')) {
-      setIsLoading(true);
-      setHasError(false);
       fetch(url)
         .then(res => res.text())
         .then(html => {
@@ -211,7 +213,10 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
             pointerEvents: isSyncScrollMode ? 'none' : 'auto',
           }}
           onLoad={() => {
-            setIsLoading(false);
+            if (isLoading) {
+              setIsLoading(false);
+              decrementLoadingCount();
+            }
             
             // Try to attach click listener for navigation sync
             const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
@@ -252,7 +257,10 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
             }
           }}
           onError={() => {
-            setIsLoading(false);
+            if (isLoading) {
+              setIsLoading(false);
+              decrementLoadingCount();
+            }
             setHasError(true);
           }}
           sandbox="allow-scripts allow-same-origin"

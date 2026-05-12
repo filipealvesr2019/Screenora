@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '@/store/useStore';
 import { 
+  Loader2,
   Globe, 
   ChevronDown, 
   LayoutGrid, 
@@ -14,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export default function Topbar() {
-  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop } = useStore();
+  const { url, setUrl, globalZoom, setGlobalZoom, isGrid, toggleGrid, setFullscreen, isFullscreen, isExtendedMode, toggleExtendedMode, isSyncScrollMode, toggleSyncScrollMode, globalScrollTop, setGlobalScrollTop, loadingCount } = useStore();
   const [inputUrl, setInputUrl] = useState(url);
 
   useEffect(() => {
@@ -41,7 +42,11 @@ export default function Topbar() {
       {/* URL Input */}
       <form onSubmit={handleSubmit} className="flex-1 max-w-2xl flex items-center gap-2">
         <div className="flex-1 bg-[#141417] border border-[#1f1f23] focus-within:border-accent/50 rounded-lg flex items-center px-3 gap-2 transition-colors">
-          <Globe className="w-4 h-4 text-muted-foreground" />
+          {loadingCount > 0 ? (
+            <Loader2 className="w-4 h-4 text-accent animate-spin" />
+          ) : (
+            <Globe className="w-4 h-4 text-muted-foreground" />
+          )}
           <input
             type="text"
             value={inputUrl}
