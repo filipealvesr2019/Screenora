@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Device, useStore } from '@/store/useStore';
-import { 
-  Trash2, 
-  Smartphone, 
-  Tablet, 
+import {
+  Trash2,
+  Smartphone,
+  Tablet,
   Monitor,
   RefreshCw,
   ExternalLink
@@ -20,6 +20,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [iframeHeight, setIframeHeight] = useState<number | null>(null);
+  const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -41,6 +42,53 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
     setIsLoading(true);
     setHasError(false);
     incrementLoadingCount();
+
+    if (url.includes('localhost') || url.includes('127.0.0.1')) {
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const baseTag = `<base href="${url}">`;
+          const scriptTag = `<script>
+            const noop = () => {};
+            try {
+              window.history.pushState = noop;
+              window.history.replaceState = noop;
+            } catch (e) {}
+
+            document.addEventListener('click', function(e) {
+              const target = e.target.closest('a');
+              if (target && target.href) {
+                const href = target.href;
+                const currentUrl = new URL(${JSON.stringify(url)});
+                const clickedUrl = new URL(href, ${JSON.stringify(url)});
+                
+                if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
+                  return;
+                }
+                
+                e.preventDefault();
+                window.parent.postMessage({
+                  type: 'NAVIGATE',
+                  url: href
+                }, '*');
+              }
+            });
+          </script>`;
+          let modifiedHtml = html;
+          if (html.includes('<head>')) {
+            modifiedHtml = html.replace('<head>', `<head>${baseTag}${scriptTag}`);
+          } else {
+            modifiedHtml = baseTag + scriptTag + html;
+          }
+          setHtmlContent(modifiedHtml);
+        })
+        .catch(err => {
+          console.error('Fetch failed:', err);
+          setHasError(true);
+        });
+    } else {
+      setHtmlContent(null);
+    }
 
     return () => {
       if (isLoadingRef.current) {
@@ -101,24 +149,24 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
           </div>
           <span className="text-xs text-muted-foreground">{width} × {height}</span>
         </div>
-        
+
         <div className="flex items-center gap-1.5">
 
-          <button 
+          <button
             onClick={reloadIframe}
             className="p-1.5 hover:bg-[#1a1a1e] rounded-md text-muted-foreground hover:text-foreground transition-colors"
             title="Reload"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
-          <button 
+          <button
             className="p-1.5 hover:bg-[#1a1a1e] rounded-md text-muted-foreground hover:text-foreground transition-colors"
             title="External Link"
             onClick={() => window.open(url, '_blank')}
           >
             <ExternalLink className="w-4 h-4" />
           </button>
-          <button 
+          <button
             onClick={() => removeDevice(device.id)}
             className="p-1.5 hover:bg-[#1a1a1e] hover:text-red-500 rounded-md text-muted-foreground transition-colors"
             title="Remove"
@@ -129,10 +177,10 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
       </div>
 
       {/* Frame Container */}
-      <div 
+      <div
         className="relative bg-[#0c0c0e] rounded-xl border border-[#1f1f23] shadow-2xl overflow-hidden"
-        style={{ 
-          width: `${width}px`, 
+        style={{
+          width: `${width}px`,
           height: `${height}px`,
           transform: `scale(${device.zoom})`,
           transformOrigin: 'top left'
@@ -154,7 +202,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
               <h3 className="font-semibold text-foreground mb-1">Failed to load</h3>
               <p className="text-xs text-muted-foreground">This site might refuse to be displayed in an iframe (X-Frame-Options).</p>
             </div>
-            <button 
+            <button
               onClick={reloadIframe}
               className="text-xs text-accent font-semibold hover:underline"
             >
@@ -165,7 +213,8 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
 
         <iframe
           id={`iframe-${device.id}`}
-          src={url.includes('localhost') || url.includes('127.0.0.1') ? url : `/api/proxy?url=${encodeURIComponent(url)}`}
+          src={htmlContent ? undefined : `/api/proxy?url=${encodeURIComponent(url)}`}
+          srcDoc={htmlContent || undefined}
           className={`w-full border-0 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           style={{
             height: isSyncScrollMode ? `${iframeHeight || maxContentHeight}px` : '100%',
@@ -177,7 +226,7 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
               setIsLoading(false);
               decrementLoadingCount();
             }
-            
+
             // Try to attach click listener for navigation sync
             const iframe = document.getElementById(`iframe-${device.id}`) as HTMLIFrameElement;
             if (iframe && iframe.contentWindow) {
@@ -188,11 +237,11 @@ export default function DeviceFrame({ device }: DeviceFrameProps) {
                     const href = target.href;
                     const currentUrl = new URL(url);
                     const clickedUrl = new URL(href, url);
-                    
+
                     if (currentUrl.origin === clickedUrl.origin && currentUrl.pathname === clickedUrl.pathname && clickedUrl.hash) {
                       return;
                     }
-                    
+
                     e.preventDefault();
                     setUrl(href);
                   }
